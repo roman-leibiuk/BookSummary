@@ -6,6 +6,10 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		3235ED432D60BB2700D15442 /* ComposableArchitecture in Frameworks */ = {isa = PBXBuildFile; productRef = 3235ED422D60BB2700D15442 /* ComposableArchitecture */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		3235ED252D60B73700D15442 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -52,6 +56,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3235ED432D60BB2700D15442 /* ComposableArchitecture in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -112,6 +117,7 @@
 			);
 			name = BookSummary;
 			packageProductDependencies = (
+				3235ED422D60BB2700D15442 /* ComposableArchitecture */,
 			);
 			productName = BookSummary;
 			productReference = 3235ED142D60B73600D15442 /* BookSummary.app */;
@@ -195,6 +201,9 @@
 			);
 			mainGroup = 3235ED0B2D60B73600D15442;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				3235ED412D60BB2700D15442 /* XCRemoteSwiftPackageReference "swift-composable-architecture" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 3235ED152D60B73600D15442 /* Products */;
 			projectDirPath = "";
@@ -395,7 +404,6 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"BookSummary/Preview Content\"";
 				DEVELOPMENT_TEAM = T9G9G976D7;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -424,7 +432,6 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"BookSummary/Preview Content\"";
 				DEVELOPMENT_TEAM = T9G9G976D7;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -558,6 +565,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		3235ED412D60BB2700D15442 /* XCRemoteSwiftPackageReference "swift-composable-architecture" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/pointfreeco/swift-composable-architecture";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.17.1;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		3235ED422D60BB2700D15442 /* ComposableArchitecture */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 3235ED412D60BB2700D15442 /* XCRemoteSwiftPackageReference "swift-composable-architecture" */;
+			productName = ComposableArchitecture;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 3235ED0C2D60B73600D15442 /* Project object */;
 }
