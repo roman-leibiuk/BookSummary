@@ -18,6 +18,24 @@ struct SummaryPlayerView: View {
 
 private extension SummaryPlayerView {
     var content: some View {
-        Text("Hello World")
+        VStack {
+            Text("Hello World")
+            audioPlayer
+        }
     }
+    
+    var audioPlayer: some View {
+        AudioPlayerView(
+            store: store.scope(
+                state: \.audioPlayerState,
+                action: \.audioPlayerAction
+            )
+        )
+    }
+}
+
+#Preview {
+    SummaryPlayerView(store: .init(initialState: SummaryPlayerFeature.State(), reducer: {
+        SummaryPlayerFeature()
+    }))
 }
