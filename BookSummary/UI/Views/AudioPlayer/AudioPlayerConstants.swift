@@ -13,7 +13,7 @@ extension AudioPlayerView {
         static let pauseIcon = "pause.fill"
         static let fastForward = "10.arrow.trianglehead.clockwise"
         static let rewind = "5.arrow.trianglehead.counterclockwise"
-        static let forward = "forward.end"
+        static let forward = "forward.end.fill"
         static let backward = "backward.end.fill"
         
         static let buttonSize: CGFloat = 44

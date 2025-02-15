@@ -19,7 +19,7 @@ struct AudioPlayerView: View {
 private extension AudioPlayerView {
     var content: some View {
         VStack {
-            Text("test")
+            Text("Inner View")
             controller
         }
         .background(.clear)

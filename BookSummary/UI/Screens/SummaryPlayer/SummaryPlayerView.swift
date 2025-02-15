@@ -19,9 +19,11 @@ struct SummaryPlayerView: View {
 private extension SummaryPlayerView {
     var content: some View {
         VStack {
-            Text("Hello World")
+            Text("PerentView")
             audioPlayer
         }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .background(.appBackground)
     }
     
     var audioPlayer: some View {
