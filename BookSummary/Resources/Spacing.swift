@@ -18,8 +18,8 @@ public enum Spacing {
     static let mdsm: CGFloat = 12
     /// Defaults to `16`
     static let md: CGFloat = 16
-    /// Defaults to `20`
-    static let mdlg: CGFloat = 20
+    /// Defaults to `18`
+    static let mdlg: CGFloat = 18
     /// Defaults to `24`
     static let lg: CGFloat = 24
     /// Defaults to `32`
