@@ -1,3 +1,12 @@
+//
+//  ChapterNavigator.swift
+//  BookSummary
+//
+//  Created by Roman Leibiuk on 17.02.2025.
+//
+
+import Foundation
+
 public actor ChapterNavigator {
     private var book: BookModel?
     private var currentIndex: Int = 0

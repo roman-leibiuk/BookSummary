@@ -18,10 +18,12 @@ struct AudioPlayerView: View {
 
 private extension AudioPlayerView {
     var content: some View {
-        VStack {
-            Text("Inner View")
+        VStack(spacing: Spacing.lg) {
             timeLine
-            controller
+            VStack(spacing: Spacing.xxl) {
+                speed
+                controller
+            }
         }
     }
     
@@ -37,16 +39,34 @@ private extension AudioPlayerView {
     }
     
     var controller: some View {
-        HStack(spacing: Spacing.lg) {
-            button(iconName: Constants.backward, size: Spacing.lg, isDisable: !store.hasPreviosTrack) { store.send(.view(.onBackward)) }
-            button(iconName: Constants.rewind) { store.send(.view(.onRewind)) }
+        HStack(spacing: Spacing.xl) {
             button(
-                iconName: store.state.isPlaying ? Constants.pauseIcon : Constants.playIcon
+                iconName: Constants.backward,
+                size: Spacing.lg,
+                isDisable: !store.hasPreviosTrack
+            ) {
+                store.send(.view(.onBackward))
+            }
+            button(iconName: Constants.rewind) {
+                store.send(.view(.onRewind))
+            }
+            button(
+                iconName: store.state.isPlaying
+                ? Constants.pauseIcon
+                : Constants.playIcon
             ) {
                 store.send(.view(.onPlayPause))
             }
-            button(iconName: Constants.fastForward) { store.send(.view(.onFastForward)) }
-            button(iconName: Constants.forward, size: Spacing.lg, isDisable: !store.hasNextTrack) { store.send(.view(.onForward)) }
+            button(iconName: Constants.fastForward) {
+                store.send(.view(.onFastForward))
+            }
+            button(
+                iconName: Constants.forward,
+                size: Spacing.lg,
+                isDisable: !store.hasNextTrack
+            ) {
+                store.send(.view(.onForward))
+            }
         }
         .padding(.horizontal, Spacing.xl)
     }
@@ -70,6 +90,23 @@ private extension AudioPlayerView {
             }
         )
         .disabled(isDisable)
+    }
+    
+    var speed: some View {
+        Menu(store.speedTitle) {
+            ForEach(store.speedOptions.reversed(), id: \.self) { option in
+                Button(String(format: "%g", option) + "x") {
+                    store.send(.view(.selectSpeed(option)))
+                }
+            }
+        }
+        .font(.system(size: 13, weight: .semibold))
+        .foregroundStyle(.black)
+        .padding(.vertical, Spacing.sm)
+        .padding(.horizontal, Spacing.sm)
+        .background(.appGreyProgress)
+        .clipShape(RoundedRectangle(cornerRadius: Spacing.xs))
+        
     }
 }
 
