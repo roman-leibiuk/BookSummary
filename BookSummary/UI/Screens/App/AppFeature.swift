@@ -36,7 +36,7 @@ struct AppFeature {
             case let .appDelegate(appDelegateAction):
                 switch appDelegateAction {
                 case .didFinishLaunching:
-                    return .none
+                    return .send(.summaryPlayerAction(.inner(.loadBook(.mock))))
                 }
             default:
                 return .none

@@ -21,6 +21,10 @@ struct AudioPlayerFeature {
         
         var currentTime: TimeInterval = 0
         var totalTime: TimeInterval = 0
+        
+        var speed: Float = 1
+        var speedTitle: String = "Speed x1"
+        var speedOptions: [Float] = [0.5, 1, 1.25, 1.5, 2]
     }
     
     enum Action {
@@ -31,6 +35,7 @@ struct AudioPlayerFeature {
             case onForward
             case onBackward
             case seekToTime(TimeInterval)
+            case selectSpeed(Float)
         }
         
         enum InnerAction {
@@ -79,6 +84,11 @@ struct AudioPlayerFeature {
                     return .send(.delegate(.onBackward))
                 case let .seekToTime(time):
                     return .send(.inner(.seekToTime(time)))
+                case let .selectSpeed(option):
+                    state.speedTitle = "Speed x\(String(format: "%g", option))"
+                    return .run { send in
+                        await audioPlayerClient.playbackRate(option)
+                    }
                 }
                 
             case let .inner(innerAction):

@@ -7,7 +7,7 @@
 
 import AVFoundation
 import ComposableArchitecture
-import MediaPlayer
+//import MediaPlayer
 
 public enum PlayerAction {
     case readyToPlay
@@ -28,8 +28,6 @@ actor AudioActor {
         
         player = AVPlayer(url: url)
         configureAudioSession()
-        configureRemoteCommandCenter()
-        updateNowPlayingInfo(for: chapter)
 
         return AsyncStream { continuation in
             self.continuation = continuation
@@ -143,18 +141,6 @@ private extension AudioActor {
         continuation = nil
     }
     
-    func configureRemoteCommandCenter() {
-        let commandCenter = MPRemoteCommandCenter.shared()
-        commandCenter.playCommand.addTarget { _ in
-            Task { await self.resume() }
-            return .success
-        }
-        commandCenter.pauseCommand.addTarget { _ in
-            Task { await self.pause() }
-            return .success
-        }
-    }
-    
     func configureAudioSession() {
         let audioSession = AVAudioSession.sharedInstance()
         do {
@@ -162,30 +148,6 @@ private extension AudioActor {
             try audioSession.setActive(true)
         } catch {
             print("Failed to configure audio session: \(error.localizedDescription)")
-        }
-    }
-    
-    func updateNowPlayingInfo(for audio: ChapterModel) {
-        var nowPlayingInfo: [String: Any] = [
-            MPMediaItemPropertyTitle: audio.title,
-            MPNowPlayingInfoPropertyPlaybackRate: player?.rate ?? 0,
-            MPNowPlayingInfoPropertyElapsedPlaybackTime: player?.currentTime().seconds ?? 0,
-            MPMediaItemPropertyPlaybackDuration: player?.currentItem?.duration.seconds ?? 0
-        ]
-        
-        guard let imageURL = audio.imageUrl else {
-            MPNowPlayingInfoCenter.default().nowPlayingInfo = nowPlayingInfo
-            return
-        }
-        
-        Task {
-            let (data, _) = try await URLSession.shared.data(from: imageURL)
-            if let artworkImage = UIImage(data: data) {
-                nowPlayingInfo[MPMediaItemPropertyArtwork] = MPMediaItemArtwork(
-                    boundsSize: artworkImage.size
-                ) { _ in artworkImage }
-            }
-            MPNowPlayingInfoCenter.default().nowPlayingInfo = nowPlayingInfo
         }
     }
 }
