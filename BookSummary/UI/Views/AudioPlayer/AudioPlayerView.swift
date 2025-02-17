@@ -9,7 +9,7 @@ import SwiftUI
 import ComposableArchitecture
 
 struct AudioPlayerView: View {
-    @Bindable var store: StoreOf<AudioPlayerFeature>
+    let store: StoreOf<AudioPlayerFeature>
     
     var body: some View {
         content
@@ -20,37 +20,56 @@ private extension AudioPlayerView {
     var content: some View {
         VStack {
             Text("Inner View")
+            timeLine
             controller
         }
-        .background(.clear)
+    }
+    
+    var timeLine: some View {
+        VStack {
+            AudioTimeLineView(
+                currentTime: store.currentTime,
+                totalTime: store.totalTime
+            ) {
+                store.send(.view(.seekToTime($0)))
+            }
+        }
     }
     
     var controller: some View {
         HStack(spacing: Spacing.lg) {
-            button(iconName: Constants.backward) { store.send(.onBackward) }
-            button(iconName: Constants.rewind) { store.send(.onRewind) }
-            button(iconName: Constants.playIcon) { store.send(.onPlayPause) }
-            button(iconName: Constants.fastForward) { store.send(.onFastForward) }
-            button(iconName: Constants.forward) { store.send(.onForward) }
+            button(iconName: Constants.backward, size: Spacing.lg, isDisable: !store.hasPreviosTrack) { store.send(.view(.onBackward)) }
+            button(iconName: Constants.rewind) { store.send(.view(.onRewind)) }
+            button(
+                iconName: store.state.isPlaying ? Constants.pauseIcon : Constants.playIcon
+            ) {
+                store.send(.view(.onPlayPause))
+            }
+            button(iconName: Constants.fastForward) { store.send(.view(.onFastForward)) }
+            button(iconName: Constants.forward, size: Spacing.lg, isDisable: !store.hasNextTrack) { store.send(.view(.onForward)) }
         }
-        .frame(height: Constants.buttonSize)
         .padding(.horizontal, Spacing.xl)
     }
     
     func button(
         iconName: String,
+        size: CGFloat = Spacing.xl,
+        isDisable: Bool = false,
         action: @escaping () -> Void
     ) -> some  View {
         Button(
             action: action,
             label: {
                 Image(systemName: iconName)
-                    .resizable()
                     .renderingMode(.template)
-                    .foregroundStyle(.black)
-//                    .frame(width: Constants.buttonSize, height: Constants.buttonSize)
+                    .resizable()
+                    .scaledToFit()
+                    .foregroundStyle(isDisable ? .appGreyProgress : .black)
+                    .frame(width: size, height: size)
+                    .animation(nil, value: store.isPlaying)
             }
         )
+        .disabled(isDisable)
     }
 }
 

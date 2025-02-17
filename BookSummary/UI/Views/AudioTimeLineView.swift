@@ -1,6 +1,14 @@
+//
+//  AudioTimeLineView.swift
+//  BookSummary
+//
+//  Created by Roman Leibiuk on 17.02.2025.
+//
+
+import SwiftUI
+
 struct AudioTimeLineView: View {
     var currentTime: TimeInterval
-    var elapsedTime: TimeInterval
     
     var totalTime: TimeInterval
     var onDragEnded: (TimeInterval) -> Void = { _ in }
@@ -30,9 +38,9 @@ struct AudioTimeLineView: View {
 private extension AudioTimeLineView {
     var content: some View {
         HStack(spacing: Spacing.xs) {
-            text(with: totalTime - elapsedTime)
+            text(with: currentTime)
             audioTimeLine
-            text(with: elapsedTime)
+            text(with: totalTime - currentTime)
         }
         .frame(height: Spacing.md)
     }
@@ -87,4 +95,8 @@ private extension AudioTimeLineView {
             .foregroundStyle(.appGreyText)
             .frame(width: Spacing.xxl)
     }
+}
+
+#Preview {
+    AudioTimeLineView(currentTime: 50, totalTime: 100) {_ in }
 }
