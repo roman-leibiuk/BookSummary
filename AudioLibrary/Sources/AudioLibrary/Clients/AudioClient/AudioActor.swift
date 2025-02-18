@@ -29,7 +29,10 @@ public actor AudioActor {
     private var statusObserver: NSKeyValueObservation?
     private var didPlayToEndTimeNotification: AnyCancellable?
     private var asyncStream: AsyncStream<PlayerAction>?
+
     private var elapseTimeStream: AsyncStream<TimeInterval>.Continuation?
+    private var timeAsyncStream: AsyncStream<TimeInterval>?
+    private var timeObserver: Any?
     
     public func play(chapter: ChapterModel) async -> AsyncStream<PlayerAction> {
         guard let url = chapter.audioURL else {
@@ -118,17 +121,16 @@ public actor AudioActor {
         return duration.seconds
     }
     
-     public func elapsedTimeUpdates(interval: CMTime = CMTime(seconds: 1, preferredTimescale: 1)) -> AsyncStream<TimeInterval> {
-        elapseTimeStream?.finish()
+    public func elapsedTimeUpdates(interval: CMTime = CMTime(seconds: 1, preferredTimescale: 1)) -> AsyncStream<TimeInterval> {
         return AsyncStream { continuation in
             elapseTimeStream = continuation
-            let observer = player.addPeriodicTimeObserver(forInterval: interval, queue: .main) { time in
+            timeObserver = player.addPeriodicTimeObserver(forInterval: interval, queue: .main) { time in
                 continuation.yield(time.seconds)
             }
             continuation.onTermination = { [weak self] _ in
                 guard let self else { return }
                 Task {
-//                    await self.player.removeTimeObserver(observer)
+                    await removeTimeObserver()
                 }
             }
         }
@@ -149,5 +151,14 @@ private extension AudioActor {
         statusObserver = nil
         didPlayToEndTimeNotification?.cancel()
         didPlayToEndTimeNotification = nil
+        await removeTimeObserver()
+    }
+    
+    func removeTimeObserver() async {
+        guard let observer = timeObserver else { return }
+        player.removeTimeObserver(observer)
+        elapseTimeStream?.finish()
+        timeObserver = nil
+        timeAsyncStream = nil
     }
 }
