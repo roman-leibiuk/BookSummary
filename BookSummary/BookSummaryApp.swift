@@ -10,7 +10,6 @@ import SwiftUI
 @main
 struct BookSummaryApp: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) private var appDelegate
-    @Environment(\.scenePhase) private var scenePhase
     
     var body: some Scene {
         WindowGroup {
