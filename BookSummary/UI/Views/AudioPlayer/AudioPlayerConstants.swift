@@ -15,7 +15,5 @@ extension AudioPlayerView {
         static let rewind = "5.arrow.trianglehead.counterclockwise"
         static let forward = "forward.end"
         static let backward = "backward.end"
-        
-        static let buttonSize: CGFloat = 44
     }
 }

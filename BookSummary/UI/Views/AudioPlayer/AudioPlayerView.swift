@@ -9,10 +9,15 @@ import SwiftUI
 import ComposableArchitecture
 
 struct AudioPlayerView: View {
+    @Environment(\.scenePhase) var scenePhase
     let store: StoreOf<AudioPlayerFeature>
     
     var body: some View {
         content
+            .onChange(of: scenePhase, { _, newValue in
+                guard newValue == .inactive else { return }
+                store.send(.view(.onDisappear))
+            })
     }
 }
 
@@ -43,7 +48,7 @@ private extension AudioPlayerView {
             button(
                 iconName: Constants.backward,
                 size: Spacing.lg,
-                isDisable: !store.hasPreviosTrack
+                isDisable: !store.hasPreviousTrack
             ) {
                 store.send(.view(.onBackward))
             }
@@ -95,18 +100,18 @@ private extension AudioPlayerView {
     var speed: some View {
         Menu(store.speedTitle) {
             ForEach(store.speedOptions.reversed(), id: \.self) { option in
-                Button(String(format: "%g", option) + "x") {
+                Button(AudioPlayerFeature.Constant.speedOption(option)) {
                     store.send(.view(.selectSpeed(option)))
                 }
             }
         }
         .font(.system(size: 13, weight: .semibold))
-        .foregroundStyle(.black)
+        .foregroundStyle(.black.opacity(store.isPlaying ? 1 : 0.5))
         .padding(.vertical, Spacing.sm)
         .padding(.horizontal, Spacing.sm)
         .background(.appGreyProgress)
         .clipShape(RoundedRectangle(cornerRadius: Spacing.xs))
-        
+        .disabled(!store.isPlaying)
     }
 }
 

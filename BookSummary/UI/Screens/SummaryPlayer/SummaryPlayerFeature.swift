@@ -11,6 +11,11 @@ import SwiftUI
 
 @Reducer
 struct SummaryPlayerFeature {
+    enum Constants {
+        static func keyPoint(current: Int, total: Int) -> String {
+            "KEY POINT \(current) OF \(total)"
+        }
+    }
     
     @ObservableState
     struct State {
@@ -19,22 +24,22 @@ struct SummaryPlayerFeature {
         var image: URL?
         var keyPoint: String = ""
         var audioPlayerState = AudioPlayerFeature.State()
+        var errorMessage: String?
+        
+        @Presents var alert: AlertState<Never>?
     }
     
     enum Action {
-        enum ViewAction {
-            case onAppear
-        }
-        
         enum InnerAction {
             case loadBook(BookModel)
             case currentChapter(ChapterModel?)
+            case configureChapter(ChapterModel?)
             case updateKeyPoint
         }
         
-        case view(ViewAction)
         case inner(InnerAction)
         case audioPlayerAction(AudioPlayerFeature.Action)
+        case alert(PresentationAction<Never>)
     }
     
     @Dependency(\.chapterNavigatorClient) var chapterNavigator
@@ -46,24 +51,18 @@ struct SummaryPlayerFeature {
         
         Reduce { state, action in
             switch action {
-            case let .view(viewAction):
-                switch viewAction {
-                case .onAppear:
-//                    return .send(.inner(.loadBook(.mock)))
-                    return .none
-                }
             case let .inner(innerAction):
                 switch innerAction {
                 case let .loadBook(book):
                     state.book = book
-                    return .run { send in
+                    return .run {  send in
                         await chapterNavigator.loadBook(book)
                         let chapter = await chapterNavigator.currentChapter()
                         let prev = await chapterNavigator.hasPreviousChapter()
                         let next = await chapterNavigator.hasNextChapter()
                         
                         await send(.inner(.currentChapter(chapter)))
-                        await send(.audioPlayerAction(.inner(.play(chapter))))
+                        await send(.audioPlayerAction(.inner(.play(chapter, shouldPlay: false))))
                         await send(.audioPlayerAction(.inner(.availableTrack(prev: prev, next: next))))
                     }
                     
@@ -79,8 +78,18 @@ struct SummaryPlayerFeature {
                         return .none
                     }
                     index += 1
-                    state.keyPoint = "KEY POINT \(index) OF \(count)"
+                    state.keyPoint = Constants.keyPoint(current: index, total: count)
                     return .none
+                    
+                case let .configureChapter(chapter):
+                    let shouldPlay = state.audioPlayerState.isPlaying
+                    return .run { @MainActor send in
+                        let prev = await chapterNavigator.hasPreviousChapter()
+                        let next = await chapterNavigator.hasNextChapter()
+                        send(.inner(.currentChapter(chapter)))
+                        send(.audioPlayerAction(.inner(.play(chapter, shouldPlay: shouldPlay))))
+                        send(.audioPlayerAction(.inner(.availableTrack(prev: prev, next: next))))
+                    }
                 }
                 
             case let .audioPlayerAction(audioPlayerAction):
@@ -90,26 +99,34 @@ struct SummaryPlayerFeature {
                     case .onForward:
                         return .run { send in
                             let chapter = await chapterNavigator.nextChapter()
-                            let prev = await chapterNavigator.hasPreviousChapter()
-                            let next = await chapterNavigator.hasNextChapter()
-                            await send(.inner(.currentChapter(chapter)))
-                            await send(.audioPlayerAction(.inner(.play(chapter))))
-                            await send(.audioPlayerAction(.inner(.availableTrack(prev: prev, next: next))))
+                            guard let chapter else {
+                                return await send(.audioPlayerAction(.inner(.pause)))
+                            }
+                            await send(.inner(.configureChapter(chapter)))
                         }
+                        
                     case .onBackward:
                         return .run { send in
                             let chapter = await chapterNavigator.previousChapter()
-                            let prev = await chapterNavigator.hasPreviousChapter()
-                            let next = await chapterNavigator.hasNextChapter()
-                            await send(.inner(.currentChapter(chapter)))
-                            await send(.audioPlayerAction(.inner(.play(chapter))))
-                            await send(.audioPlayerAction(.inner(.availableTrack(prev: prev, next: next))))
+                            guard let chapter else {
+                                return
+                            }
+                            await send(.inner(.configureChapter(chapter)))
                         }
+                        
+                    case let .errorOccurred(error):
+                        state.alert = AlertState { TextState(error.localizedDescription) }
+                        return .none
                     }
+                    
                 default:
                     return .none
                 }
+                
+            case .alert:
+                return .none
             }
         }
+        .ifLet(\.$alert, action: \.alert)
     }
 }
