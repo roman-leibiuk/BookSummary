@@ -18,7 +18,7 @@ struct SummaryPlayerFeature {
     }
     
     @ObservableState
-    struct State {
+    struct State: Equatable {
         var book: BookModel?
         var currentChapter: ChapterModel?
         var image: URL?
@@ -29,8 +29,8 @@ struct SummaryPlayerFeature {
         @Presents var alert: AlertState<Never>?
     }
     
-    enum Action {
-        enum InnerAction {
+    enum Action: Equatable {
+        enum InnerAction: Equatable {
             case loadBook(BookModel)
             case currentChapter(ChapterModel?)
             case configureChapter(ChapterModel?)
@@ -55,7 +55,7 @@ struct SummaryPlayerFeature {
                 switch innerAction {
                 case let .loadBook(book):
                     state.book = book
-                    return .run {  send in
+                    return .run { send in
                         await chapterNavigator.loadBook(book)
                         let chapter = await chapterNavigator.currentChapter()
                         let prev = await chapterNavigator.hasPreviousChapter()

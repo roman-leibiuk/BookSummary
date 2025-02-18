@@ -16,8 +16,8 @@ public struct ChapterModel: Equatable, Identifiable, Sendable {
     public init(
         id: String,
         title: String,
-        imageUrl: URL?,
-        audioURL: URL?
+        imageUrl: URL? = nil,
+        audioURL: URL? = nil
     ) {
         self.id = id
         self.title = title

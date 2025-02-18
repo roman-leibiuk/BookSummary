@@ -11,8 +11,8 @@ public actor ChapterNavigator {
     private var book: BookModel?
     private var currentIndex: Int = 0
     
-    public func loadBook(_ newBook: BookModel) {
-        book = newBook
+    public func load(book: BookModel) {
+        self.book = book
         currentIndex = 0
     }
     

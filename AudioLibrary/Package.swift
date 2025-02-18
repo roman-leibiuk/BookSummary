@@ -5,7 +5,7 @@ import PackageDescription
 
 let package = Package(
     name: "AudioLibrary",
-    platforms: [.iOS(.v13)],
+    platforms: [.iOS(.v18)],
     products: [
         .library(
             name: "AudioLibrary",
@@ -20,10 +20,6 @@ let package = Package(
             dependencies: [
                 .product(name: "ComposableArchitecture", package: "swift-composable-architecture")
             ]
-        ),
-        .testTarget(
-            name: "AudioLibraryTests",
-            dependencies: ["AudioLibrary"]
-        ),
+        )
     ]
 )

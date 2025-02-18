@@ -42,4 +42,26 @@ extension AudioPlayerClient: DependencyKey {
             playbackRate: { await audioActor.setPlaybackRate($0) }
         )
     }
+    
+    public static var testValue: AudioPlayerClient {
+        return Self(
+            play: { _ in AsyncStream { continuation in
+                continuation.yield(.readyToPlay)
+                continuation.finish()
+            }},
+            resume: { },
+            pause: { },
+            fastForward: { _ in },
+            rewind: { _ in },
+            seekTo: { _ in },
+            totalTime: { 100 },
+            elapsedTimeUpdates: { AsyncStream { continuation in
+                continuation.yield(10)
+                continuation.yield(20)
+                continuation.yield(30)
+                continuation.finish()
+            }},
+            playbackRate: { _ in }
+        )
+    }
 }
