@@ -7,7 +7,7 @@
 
 import Foundation
 import ComposableArchitecture
-import SwiftUI
+import AudioLibrary
 
 @Reducer
 struct SummaryPlayerFeature {
@@ -120,7 +120,7 @@ struct SummaryPlayerFeature {
                         }
                         
                     case let .errorOccurred(error):
-                        state.alert = AlertState { TextState(error.localizedDescription) }
+                        state.alert = AlertState { TextState(error) }
                         return .none
                     }
                     

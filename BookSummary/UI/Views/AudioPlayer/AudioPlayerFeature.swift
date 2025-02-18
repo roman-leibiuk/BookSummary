@@ -7,6 +7,7 @@
 
 import Foundation
 import ComposableArchitecture
+import AudioLibrary
 
 @Reducer
 struct AudioPlayerFeature {
@@ -63,7 +64,7 @@ struct AudioPlayerFeature {
         enum DelegateAction {
             case onForward
             case onBackward
-            case errorOccurred(Error)
+            case errorOccurred(String)
         }
         
         case view(ViewAction)

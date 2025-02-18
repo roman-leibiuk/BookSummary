@@ -8,14 +8,14 @@
 import AVFoundation
 import Dependencies
 
-extension DependencyValues {
+public extension DependencyValues {
     var audioPlayerClient: AudioPlayerClient {
         get { self[AudioPlayerClient.self] }
         set { self[AudioPlayerClient.self] = newValue }
     }
 }
 
-public struct AudioPlayerClient {
+public struct AudioPlayerClient: Sendable {
     public var play: @Sendable (ChapterModel) async -> AsyncStream<PlayerAction> = { _ in .finished }
     public var resume: @Sendable () async -> Void
     public var pause: @Sendable () async -> Void
