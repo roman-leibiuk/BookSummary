@@ -46,11 +46,6 @@
 			path = BookSummaryTests;
 			sourceTree = "<group>";
 		};
-		3235ED312D60B73700D15442 /* BookSummaryUITests */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = BookSummaryUITests;
-			sourceTree = "<group>";
-		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -93,7 +88,6 @@
 				32295E5C2D64EB0F00678C6C /* AudioLibrary */,
 				3235ED162D60B73600D15442 /* BookSummary */,
 				3235ED272D60B73700D15442 /* BookSummaryTests */,
-				3235ED312D60B73700D15442 /* BookSummaryUITests */,
 				32295E5D2D64ECB200678C6C /* Frameworks */,
 				3235ED152D60B73600D15442 /* Products */,
 			);
@@ -171,9 +165,6 @@
 			);
 			dependencies = (
 				3235ED302D60B73700D15442 /* PBXTargetDependency */,
-			);
-			fileSystemSynchronizedGroups = (
-				3235ED312D60B73700D15442 /* BookSummaryUITests */,
 			);
 			name = BookSummaryUITests;
 			packageProductDependencies = (
