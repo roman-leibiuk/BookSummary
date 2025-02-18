@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		32295E5F2D64ECB200678C6C /* AudioLibrary in Frameworks */ = {isa = PBXBuildFile; productRef = 32295E5E2D64ECB200678C6C /* AudioLibrary */; };
 		3235ED432D60BB2700D15442 /* ComposableArchitecture in Frameworks */ = {isa = PBXBuildFile; productRef = 3235ED422D60BB2700D15442 /* ComposableArchitecture */; };
 /* End PBXBuildFile section */
 
@@ -28,6 +29,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		32295E5C2D64EB0F00678C6C /* AudioLibrary */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = AudioLibrary; sourceTree = "<group>"; };
 		3235ED142D60B73600D15442 /* BookSummary.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BookSummary.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3235ED242D60B73700D15442 /* BookSummaryTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BookSummaryTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		3235ED2E2D60B73700D15442 /* BookSummaryUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BookSummaryUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -57,6 +59,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				3235ED432D60BB2700D15442 /* ComposableArchitecture in Frameworks */,
+				32295E5F2D64ECB200678C6C /* AudioLibrary in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -77,12 +80,21 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		32295E5D2D64ECB200678C6C /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		3235ED0B2D60B73600D15442 = {
 			isa = PBXGroup;
 			children = (
+				32295E5C2D64EB0F00678C6C /* AudioLibrary */,
 				3235ED162D60B73600D15442 /* BookSummary */,
 				3235ED272D60B73700D15442 /* BookSummaryTests */,
 				3235ED312D60B73700D15442 /* BookSummaryUITests */,
+				32295E5D2D64ECB200678C6C /* Frameworks */,
 				3235ED152D60B73600D15442 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -118,6 +130,7 @@
 			name = BookSummary;
 			packageProductDependencies = (
 				3235ED422D60BB2700D15442 /* ComposableArchitecture */,
+				32295E5E2D64ECB200678C6C /* AudioLibrary */,
 			);
 			productName = BookSummary;
 			productReference = 3235ED142D60B73600D15442 /* BookSummary.app */;
@@ -578,6 +591,10 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		32295E5E2D64ECB200678C6C /* AudioLibrary */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = AudioLibrary;
+		};
 		3235ED422D60BB2700D15442 /* ComposableArchitecture */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 3235ED412D60BB2700D15442 /* XCRemoteSwiftPackageReference "swift-composable-architecture" */;

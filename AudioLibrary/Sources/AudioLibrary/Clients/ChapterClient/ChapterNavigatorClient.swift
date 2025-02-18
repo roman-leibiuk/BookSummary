@@ -8,13 +8,13 @@
 import Dependencies
 
 extension DependencyValues {
-    var chapterNavigatorClient: ChapterNavigatorClient {
+    public var chapterNavigatorClient: ChapterNavigatorClient {
         get { self[ChapterNavigatorClient.self] }
         set { self[ChapterNavigatorClient.self] = newValue }
     }
 }
 
-public struct ChapterNavigatorClient {
+public struct ChapterNavigatorClient: Sendable {
     public var loadBook: @Sendable (BookModel) async -> Void
     public var currentChapter: @Sendable () async -> ChapterModel?
     public var hasNextChapter: @Sendable () async -> Bool

@@ -9,10 +9,10 @@ import AVFoundation
 import ComposableArchitecture
 import Combine
 
-public enum PlayerAction {
+public enum PlayerAction: Sendable {
     case readyToPlay
     case didFinish
-    case error(Error)
+    case error(String)
 }
 
 public actor AudioActor {
@@ -31,7 +31,7 @@ public actor AudioActor {
     private var asyncStream: AsyncStream<PlayerAction>?
     private var elapseTimeStream: AsyncStream<TimeInterval>.Continuation?
     
-    func play(chapter: ChapterModel) async -> AsyncStream<PlayerAction> {
+    public func play(chapter: ChapterModel) async -> AsyncStream<PlayerAction> {
         guard let url = chapter.audioURL else {
             return .finished
         }
@@ -43,7 +43,7 @@ public actor AudioActor {
             self.continuation = continuation
             
             guard let playerItem = player.currentItem else {
-                continuation.yield(.error(Constants.errorDescription(Constants.failedToLoad)))
+                continuation.yield(.error(Constants.failedToLoad))
                 return
             }
             
@@ -62,10 +62,10 @@ public actor AudioActor {
                         continuation.yield(.readyToPlay)
                     case .failed:
                         guard let error = item.error else {
-                            continuation.yield(.error(Constants.errorDescription(Constants.unknownError)))
+                            continuation.yield(.error(Constants.unknownError))
                             return
                         }
-                        continuation.yield(.error(error))
+                        continuation.yield(.error(error.localizedDescription))
                     default:
                         break
                     }
@@ -81,29 +81,29 @@ public actor AudioActor {
         return stream
     }
     
-    func pause() async {
-        player.pause()
+    public func pause() async {
+        await player.pause()
     }
     
-    func resume() async {
-        player.play()
+    public func resume() async {
+        await player.play()
     }
     
-    func fastForward(seconds: Double) async {
+    public func fastForward(seconds: Double) async {
         let newTime = player.currentTime().seconds + seconds
         await player.seek(to: CMTime(seconds: newTime, preferredTimescale: 1))
     }
     
-    func rewind(seconds: Double) async {
+    public func rewind(seconds: Double) async {
         let newTime = max(0, player.currentTime().seconds - seconds)
         await player.seek(to: CMTime(seconds: newTime, preferredTimescale: 1))
     }
     
-    func seekTo(_ timeInterval: TimeInterval) async {
+    public func seekTo(_ timeInterval: TimeInterval) async {
         await player.seek(to: CMTime(seconds: timeInterval, preferredTimescale: 1))
     }
     
-    func totalTime() -> TimeInterval {
+    public func totalTime() -> TimeInterval {
         guard let currentItem = player.currentItem else {
             print("totalTime(): No player or currentItem")
             return 0
@@ -118,7 +118,7 @@ public actor AudioActor {
         return duration.seconds
     }
     
-    func elapsedTimeUpdates(interval: CMTime = CMTime(seconds: 1, preferredTimescale: 1)) -> AsyncStream<TimeInterval> {
+     public func elapsedTimeUpdates(interval: CMTime = CMTime(seconds: 1, preferredTimescale: 1)) -> AsyncStream<TimeInterval> {
         elapseTimeStream?.finish()
         return AsyncStream { continuation in
             elapseTimeStream = continuation
@@ -126,13 +126,17 @@ public actor AudioActor {
                 continuation.yield(time.seconds)
             }
             continuation.onTermination = { [weak self] _ in
-                Task { await self?.player.removeTimeObserver(observer) }
+                guard let self else { return }
+                Task {
+//                    await self.player.removeTimeObserver(observer)
+                }
             }
         }
     }
     
-    func setPlaybackRate(_ rate: Float) {
-        player.rate = rate
+    @MainActor
+    public func setPlaybackRate(_ rate: Float) async {
+        await player.rate = rate
     }
 }
 

@@ -1,15 +1,12 @@
 //
-//  BookModel.swift
+//  BookModelMock.swift
 //  BookSummary
 //
-//  Created by Roman Leibiuk on 15.02.2025.
+//  Created by Roman Leibiuk on 18.02.2025.
 //
 
 import Foundation
-
-public struct BookModel {
-    public let chapters: [ChapterModel]
-}
+import AudioLibrary
 
 extension BookModel {
     static let mock: BookModel = .init(chapters: (1...36).map { configureLittlePrince(by: $0) } )
