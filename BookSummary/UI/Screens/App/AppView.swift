@@ -9,7 +9,7 @@ import SwiftUI
 import ComposableArchitecture
 
 struct AppView: View {
-    @Bindable var store: StoreOf<AppFeature>
+    let store: StoreOf<AppFeature>
     
     var body: some View {
         content
@@ -32,7 +32,6 @@ private extension AppView {
             action: \.summaryPlayerAction
         ) {
             SummaryPlayerView(store: store)
-                .transition(.slide)
         }
     }
 }

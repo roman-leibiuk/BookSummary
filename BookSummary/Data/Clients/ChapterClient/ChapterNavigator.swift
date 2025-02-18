@@ -41,8 +41,8 @@ public actor ChapterNavigator {
         return currentChapter()
     }
     
-    public func jumpToChapter(index: Int) -> ChapterModel? {
-        guard let book, index >= 0, index < book.chapters.count else { return nil }
+    public func jumpToChapter(_ index: Int) -> ChapterModel? {
+        guard let book, book.chapters.count > index else { return nil }
         currentIndex = index
         return currentChapter()
     }

@@ -9,13 +9,11 @@ import SwiftUI
 import ComposableArchitecture
 
 struct SummaryPlayerView: View {
-    let store: StoreOf<SummaryPlayerFeature>
+    @Bindable var store: StoreOf<SummaryPlayerFeature>
     
     var body: some View {
         content
-            .onAppear {
-                store.send(.view(.onAppear))
-            }
+            .alert($store.scope(state: \.alert, action: \.alert))
     }
 }
 

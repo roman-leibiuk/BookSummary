@@ -15,6 +15,7 @@ struct AudioTimeLineView: View {
     
     @State private var dragOffset: CGFloat = .zero
     @State private var isDragging: Bool = false
+    @State private var progressAnimation: Animation? = .linear(duration: 1)
     
     var body: some View {
         content
@@ -50,9 +51,15 @@ private extension AudioTimeLineView {
             let width = geometry.size.width - Spacing.mdlg
             progress
                 .frame(width: geometry.size.width)
-                .onChange(of: currentTime) { _, newValue in
+                .onChange(of: currentTime) { oldValue, newValue in
                     guard !isDragging else { return }
-                    dragOffset = updateOffset(currentTime: newValue, width: width)
+                    let difference = abs(newValue - oldValue)
+                    progressAnimation = newValue == 0 || difference > 2
+                    ? nil
+                    : .linear(duration: 1)
+                    withAnimation(progressAnimation) {
+                        dragOffset = updateOffset(currentTime: newValue, width: width)
+                    }
                 }
                 .gesture(
                     DragGesture()

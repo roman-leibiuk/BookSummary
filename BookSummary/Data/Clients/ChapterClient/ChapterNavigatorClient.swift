@@ -35,7 +35,7 @@ extension ChapterNavigatorClient: DependencyKey {
             hasPreviousChapter: { await navigator.hasPreviousChapter() },
             nextChapter: { await navigator.nextChapter() },
             previousChapter: { await navigator.previousChapter() },
-            jumpToChapter: { index in await navigator.jumpToChapter(index: index) }
+            jumpToChapter: { await navigator.jumpToChapter($0) }
         )
     }
 }
