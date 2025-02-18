@@ -5,7 +5,6 @@
 //  Created by Roman Leibiuk on 17.02.2025.
 //
 
-
 import AVFoundation
 import ComposableArchitecture
 import Combine
@@ -30,6 +29,7 @@ public actor AudioActor {
     private var statusObserver: NSKeyValueObservation?
     private var didPlayToEndTimeNotification: AnyCancellable?
     private var asyncStream: AsyncStream<PlayerAction>?
+    private var elapseTimeStream: AsyncStream<TimeInterval>.Continuation?
     
     func play(chapter: ChapterModel) async -> AsyncStream<PlayerAction> {
         guard let url = chapter.audioURL else {
@@ -119,7 +119,9 @@ public actor AudioActor {
     }
     
     func elapsedTimeUpdates(interval: CMTime = CMTime(seconds: 1, preferredTimescale: 1)) -> AsyncStream<TimeInterval> {
-        AsyncStream { continuation in
+        elapseTimeStream?.finish()
+        return AsyncStream { continuation in
+            elapseTimeStream = continuation
             let observer = player.addPeriodicTimeObserver(forInterval: interval, queue: .main) { time in
                 continuation.yield(time.seconds)
             }

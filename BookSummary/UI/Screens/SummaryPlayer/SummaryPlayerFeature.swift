@@ -98,7 +98,12 @@ struct SummaryPlayerFeature {
                     switch delegateAction {
                     case .onForward:
                         return .run { send in
-                            let chapter = await chapterNavigator.nextChapter()
+                            var chapter = await chapterNavigator.nextChapter()
+                            if chapter == nil {
+                                chapter = await chapterNavigator.jumpToChapter(0)
+                                await send(.audioPlayerAction(.inner(.pause)))
+                            }
+                            
                             guard let chapter else {
                                 return await send(.audioPlayerAction(.inner(.pause)))
                             }

@@ -106,12 +106,11 @@ private extension AudioPlayerView {
             }
         }
         .font(.system(size: 13, weight: .semibold))
-        .foregroundStyle(.black.opacity(store.isPlaying ? 1 : 0.5))
+        .foregroundStyle(.black)
         .padding(.vertical, Spacing.sm)
         .padding(.horizontal, Spacing.sm)
         .background(.appGreyProgress)
         .clipShape(RoundedRectangle(cornerRadius: Spacing.xs))
-        .disabled(!store.isPlaying)
     }
 }
 
