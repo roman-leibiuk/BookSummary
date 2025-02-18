@@ -29,7 +29,7 @@ extension ChapterNavigatorClient: DependencyKey {
         let navigator = ChapterNavigator()
         
         return Self(
-            loadBook: { await navigator.loadBook($0) },
+            loadBook: { await navigator.load(book: $0) },
             currentChapter: { await navigator.currentChapter() },
             hasNextChapter: { await navigator.hasNextChapter() },
             hasPreviousChapter: { await navigator.hasPreviousChapter() },
@@ -38,4 +38,17 @@ extension ChapterNavigatorClient: DependencyKey {
             jumpToChapter: { await navigator.jumpToChapter($0) }
         )
     }
+    
+    public static var testValue: ChapterNavigatorClient {
+        return Self(
+            loadBook: { _ in },
+            currentChapter: { return ChapterModel(id: "1", title: "Chapter 1", imageUrl: nil, audioURL: nil) },
+            hasNextChapter: { true },
+            hasPreviousChapter: { false },
+            nextChapter: { ChapterModel(id: "2", title: "Chapter 2", imageUrl: nil, audioURL: nil) },
+            previousChapter: { ChapterModel(id: "0", title: "Chapter 0", imageUrl: nil, audioURL: nil) },
+            jumpToChapter: { _ in ChapterModel(id: "0", title: "Chapter 0", imageUrl: nil, audioURL: nil) }
+        )
+    }
 }
+

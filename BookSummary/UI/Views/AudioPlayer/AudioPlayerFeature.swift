@@ -24,7 +24,7 @@ struct AudioPlayerFeature {
     }
     
     @ObservableState
-    struct State {
+    struct State: Equatable {
         var chapter: ChapterModel?
         var isReadyToPlay: Bool = false
         var isPlaying: Bool = false
@@ -37,8 +37,8 @@ struct AudioPlayerFeature {
         var speedOptions: [Float] = [0.5, 1, 1.25, 1.5, 2]
     }
     
-    enum Action {
-        enum ViewAction {
+    enum Action: Equatable {
+        enum ViewAction: Equatable {
             case onPlayPause
             case onFastForward
             case onRewind
@@ -49,7 +49,7 @@ struct AudioPlayerFeature {
             case onDisappear
         }
         
-        enum InnerAction {
+        enum InnerAction: Equatable {
             case play(ChapterModel?, shouldPlay: Bool)
             case availableTrack(prev: Bool, next: Bool)
             case pause
@@ -61,7 +61,7 @@ struct AudioPlayerFeature {
             case updateTime
         }
         
-        enum DelegateAction {
+        enum DelegateAction: Equatable {
             case onForward
             case onBackward
             case errorOccurred(String)
