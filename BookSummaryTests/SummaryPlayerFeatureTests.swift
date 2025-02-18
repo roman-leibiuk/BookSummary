@@ -10,6 +10,7 @@ import ComposableArchitecture
 @testable import BookSummary
 import AudioLibrary
 
+@MainActor
 final class SummaryPlayerFeatureTests: XCTestCase {
     
     var store: TestStore<SummaryPlayerFeature.State, SummaryPlayerFeature.Action>!
