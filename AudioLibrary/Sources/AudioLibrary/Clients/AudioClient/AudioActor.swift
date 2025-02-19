@@ -85,11 +85,11 @@ public actor AudioActor {
     }
     
     public func pause() async {
-        await player.pause()
+        player.pause()
     }
     
     public func resume() async {
-        await player.play()
+        player.play()
     }
     
     public func fastForward(seconds: Double) async {
