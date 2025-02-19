@@ -1,5 +1,5 @@
 //
-//  ChapterNavigator.swift
+//  AudioActor.swift
 //  BookSummary
 //
 //  Created by Roman Leibiuk on 17.02.2025.

@@ -12,6 +12,7 @@ import AudioLibrary
 @Reducer
 struct SummaryPlayerFeature {
     enum Constants {
+        static var comingSoonMsg = "Тут буде щось дууууже важлие"
         static func keyPoint(current: Int, total: Int) -> String {
             "KEY POINT \(current) OF \(total)"
         }
@@ -25,11 +26,15 @@ struct SummaryPlayerFeature {
         var keyPoint: String = ""
         var audioPlayerState = AudioPlayerFeature.State()
         var errorMessage: String?
+        var switchCircleOffset: CGFloat = .zero
         
         @Presents var alert: AlertState<Never>?
     }
     
     enum Action: Equatable {
+        enum ViewAction: Equatable {
+            case onTapSwitch(isList: Bool)
+        }
         enum InnerAction: Equatable {
             case loadBook(BookModel)
             case currentChapter(ChapterModel?)
@@ -37,11 +42,13 @@ struct SummaryPlayerFeature {
             case updateKeyPoint
         }
         
+        case view(ViewAction)
         case inner(InnerAction)
         case audioPlayerAction(AudioPlayerFeature.Action)
         case alert(PresentationAction<Never>)
     }
     
+    @Dependency(\.continuousClock) var clock
     @Dependency(\.chapterNavigatorClient) var chapterNavigator
     
     var body: some ReducerOf<Self> {
@@ -51,6 +58,15 @@ struct SummaryPlayerFeature {
         
         Reduce { state, action in
             switch action {
+            case let .view(viewAction):
+                switch viewAction {
+                case let .onTapSwitch(isList):
+                    state.switchCircleOffset = isList ? Spacing.xxl : .zero
+                    if isList {
+                        state.alert = AlertState { TextState(Constants.comingSoonMsg) }
+                    }
+                    return .none
+                }
             case let .inner(innerAction):
                 switch innerAction {
                 case let .loadBook(book):
@@ -127,6 +143,12 @@ struct SummaryPlayerFeature {
                 default:
                     return .none
                 }
+                
+            case .alert(.dismiss):
+                return .concatenate(
+                    .run { _ in try? await clock.sleep(for: .seconds(0.25)) },
+                    .send(.view(.onTapSwitch(isList: false)), animation: .default)
+                )
                 
             case .alert:
                 return .none

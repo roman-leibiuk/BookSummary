@@ -110,7 +110,7 @@ private extension AudioPlayerView {
         .padding(.vertical, Spacing.sm)
         .padding(.horizontal, Spacing.sm)
         .background(.appGreyProgress)
-        .clipShape(RoundedRectangle(cornerRadius: Spacing.xs))
+        .clipShape(RoundedRectangle(cornerRadius: Spacing.sm))
     }
 }
 

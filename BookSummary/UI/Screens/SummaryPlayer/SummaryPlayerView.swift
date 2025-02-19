@@ -24,9 +24,11 @@ private extension SummaryPlayerView {
             textStack
             audioPlayer
             Spacer()
+            switcher
         }
         .padding(.top, Spacing.xl)
         .padding(.horizontal, Spacing.md)
+        .padding(.bottom,Spacing.lg)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(.appBackground)
     }
@@ -47,8 +49,8 @@ private extension SummaryPlayerView {
                 .scaledToFill()
         } placeholder: {
             ZStack {
-                Rectangle().fill(.appSwitchBackGround)
-                ProgressView()
+                Rectangle().fill(.appSwitchBackground)
+                ProgressView().tint(.appSecondBlue)
             }
         }
         .frame(
@@ -77,6 +79,47 @@ private extension SummaryPlayerView {
         VStack(spacing: Spacing.sm) {
             keyPoint
             title
+        }
+    }
+    
+    var switcher: some View {
+        ZStack(alignment: .leading) {
+            Circle()
+                .fill(.accent)
+                .frame(width: Spacing.xxl, height: Spacing.xxl)
+                .offset(x: store.switchCircleOffset)
+            HStack(spacing: Spacing.xl) {
+                switchItem(imageName: Constants.headphonesIcon) {
+                    store.send(.view(.onTapSwitch(isList: false)), animation: .default)
+                }
+                .foregroundStyle(store.switchCircleOffset == .zero ? .white : .black)
+                switchItem(imageName: Constants.listIcon) {
+                    store.send(.view(.onTapSwitch(isList: true)), animation: .default)
+                }
+                .foregroundStyle(store.switchCircleOffset != .zero ? .white : .black)
+            }
+            .padding(.horizontal, Spacing.md)
+        }
+        .padding(Spacing.xs)
+        .background(
+            Capsule()
+                .fill(.appSwitchBackground)
+                .stroke(Color.appGreyProgress, lineWidth: 1)
+        )
+    }
+    
+    func switchItem(
+        imageName: String,
+        action: @escaping () -> Void
+    ) -> some View {
+        Button {
+            action()
+        } label: {
+            Image(systemName: imageName)
+                .renderingMode(.template)
+                .resizable()
+                .scaledToFill()
+                .frame(width: Spacing.md, height: Spacing.md)
         }
     }
 }
