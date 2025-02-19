@@ -47,7 +47,7 @@ private extension SummaryPlayerView {
                 .scaledToFill()
         } placeholder: {
             ZStack {
-                Rectangle().fill(.appSwitchBackGround)
+                Rectangle().fill(.appSwitchBackground)
                 ProgressView()
             }
         }
